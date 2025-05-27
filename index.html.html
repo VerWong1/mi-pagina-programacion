@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Proyecto Equipo 4 - Mundo de la Programación</title>
+    <style>
+        /* Reset & base */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #f0f4f8;
+        }
+        a {
+            text-decoration: none;
+            color: #a3d2f2;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        a:hover, a:focus {
+            color: #fffffe;
+            outline: none;
+        }
+        /* Container and layout */
+        #container {
+            max-width: 960px;
+            margin: 25px auto;
+            background: #0f1e38;
+            border-radius: 12px;
+            box-shadow: 0 12px 25px rgba(29, 74, 122, 0.8);
+            padding: 30px 35px 45px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            border-bottom: 3px solid #6bc1ff;
+            padding-bottom: 18px;
+            margin-bottom: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            color: #90caf9;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        header .location {
+            font-size: 1.1rem;
+            color: #a3d2f2;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        nav {
+            position: relative;
+            z-index: 10;
+        }
+        /* Menu horizontal with dropdown */
+        ul.menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        ul.menu > li {
+            position: relative;
+        }
+        ul.menu > li > a {
+            padding: 10px 14px;
+            border-radius: 6px;
+            display: block;
+            background: transparent;
+            color: #a3d2f2;
+            user-select: none;
+        }
+        ul.menu > li > a:hover, ul.menu > li > a.active {
+            background: #4a90e2;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        /* Dropdown */
+        ul.menu li ul.dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #1b2a51;
+            border-radius: 8px;
+            padding: 8px 0;
+            min-width: 220px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        ul.menu li:hover ul.dropdown, ul.menu li:focus-within ul.dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        ul.menu li ul.dropdown li {
+            padding: 0;
+            margin: 0;
+        }
+        ul.menu li ul.dropdown li a {
+            padding: 10px 16px;
+            color: #b9d6fb;
+            font-weight: 500;
+            display: block;
+        }
+        ul.menu li ul.dropdown li a:hover {
+            background: #3369ce;
+            color: white;
+        }
+        /* Page sections */
+        section.page {
+            display: none;
+            animation: fadeInPage 0.5s ease forwards;
+            flex-grow: 1;
+        }
+        section.page.active {
+            display: block;
+        }
+        @keyframes fadeInPage {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        /* Boxes and margins */
+        .box {
+            background: linear-gradient(135deg, #3a5a99 0%, #2a4370 100%);
+            border: 2px solid #4178c0;
+            border-radius: 14px;
+            padding: 22px 28px;
+            margin: 25px 0;
+            box-shadow: inset 0 0 15px rgb(77 135 199 / 0.3);
+            color: #dde9f8;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        .highlight-text {
+            color: #81d4fa;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+            box-shadow: 0 0 18px rgba(48, 88, 152, 0.35);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #19345a;
+            color: #b8d1fb;
+        }
+        thead {
+            background: #4472ce;
+            color: #f0f8ff;
+            font-weight: 700;
+        }
+        th, td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #3560b4;
+            text-align: left;
+        }
+        tbody tr:nth-child(even) {
+            background: #1f3c7f;
+        }
+        tbody tr:hover {
+            background: #2a599c;
+            color: #e1ecfe;
+        }
+        caption {
+            caption-side: bottom;
+            padding-top: 12px;
+            font-style: italic;
+            color: #8fb4e1;
+            font-size: 0.95rem;
+        }
+        /* Images */
+        img.responsive {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 3px 4px 12px rgba(81, 150, 228, 0.7);
+            margin-bottom: 18px;
+        }
+        .image-left {
+            float: left;
+            margin-right: 22px;
+            width: 48%;
+            max-width: 360px;
+            border-radius: 14px;
+            border: 3px solid #67a7fb;
+            box-shadow: 1px 1px 12px rgba(77, 131, 210, 0.65);
+        }
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        /* Footer */
+        footer {
+            margin-top: 45px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #8db1eb;
+            border-top: 1px solid #3c5ba7;
+            padding-top: 18px;
+            font-weight: 500;
+        }
+        /* Code block styles */
+        pre {
+            max-height: 450px;
+            overflow: auto;
+            background: #172a4a;
+            border: 1px solid #4178c0;
+            border-radius: 14px;
+            padding: 15px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #b8d1fb;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        /* Responsive */
+        @media (max-width: 720px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            ul.menu {
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+            }
+            ul.menu li ul.dropdown {
+                position: static;
+                transform: translateY(0);
+                opacity: 1 !important;
+                visibility: visible !important;
+                box-shadow: none;
+                min-width: 100%;
+                margin-top: 8px;
+                border-radius: 10px;
+                padding: 10px 0;
+            }
+            .image-left {
+                width: 100%;
+                margin: 0 0 22px 0;
+                float: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <header>
+            <h1>Mundo de la Programación</h1>
+            <div class="location" tabindex="0" aria-label="Lugar de desarrollo del proyecto">Desarrollado en: Nuevo Casas Grandes, Chihuahua</div>
+            <nav aria-label="Menú principal del sitio">
+                <ul class="menu" role="menubar">
+                    <li role="none">
+                        <a href="#" class="nav-link active" data-page="home" role="menuitem" tabindex="0">Inicio</a>
+                    </li>
+                    <li role="none">
+                        <a href="#" class="nav-link" data-page="page1" role="menuitem" tabindex="0">Lenguajes Populares</a>
+                    </li>
+                    <li role="none">
+                        <a href="#" class="nav-link" data-page="page2" role="menuitem" tabindex="0">Herramientas y Frameworks</a>
+                    </li>
+                    <li role="none">
+                        <a href="#" class="nav-link" data-page="page3" role="menuitem" tabindex="0">Código Fuente</a>
+                    </li>
+                    <li role="none" aria-haspopup="true">
+                        <a href="#" role="menuitem" aria-expanded="false" aria-controls="submenu-team" id="menu-team" tabindex="0">Equipo ▾</a>
+                        <ul class="dropdown" role="menu" aria-labelledby="menu-team" id="submenu-team">
+                            <li role="none"><a href="#" role="menuitem" tabindex="-1">Jorge Espinoza Melendez</a></li>
+                            <li role="none"><a href="#" role="menuitem" tabindex="-1">Emiliano Jaquez Reyes</a></li>
+                            <li role="none"><a href="#" role="menuitem" tabindex="-1">Jhonatan Perez</a></li>
+                            <li role="none"><a href="#" role="menuitem" tabindex="-1">Pablo Morales</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Página Inicio -->
+        <section id="home" class="page active" tabindex="0" aria-label="Página de inicio">
+            <h2>Bienvenidos al fascinante mundo de la programación</h2>
+            <div class="box clearfix" role="region" aria-label="Introducción con imagen y texto">
+                <img src="https://images.unsplash.com/photo-1517433456452-f9633a875f6f?auto=format&fit=crop&w=640&q=80" alt="Pantalla con código, teclado y café, simbolizando programación" class="image-left responsive" />
+                <p>La programación es la habilidad fundamental que permite crear software, aplicaciones y soluciones digitales que impactan el mundo moderno.</p>
+                <p class="highlight-text">Desde crear páginas web hasta desarrollar inteligencia artificial, la programación abre infinitas posibilidades.</p>
+            </div>
+            <h3>¿Qué encontrarás en este sitio?</h3>
+            <ul>
+                <li>Características y usos de los lenguajes de programación más influyentes.</li>
+                <li>Explicaciones detalladas sobre herramientas y frameworks esenciales.</li>
+                <li>Tablas informativas, imágenes ilustrativas y enlaces útiles para aprender más.</li>
+            </ul>
+        </section>
+
+        <!-- Página Lenguajes Populares -->
+        <section id="page1" class="page" tabindex="0" aria-label="Información sobre lenguajes de programación populares">
+            <h2>Lenguajes de Programación Populares</h2>
+            <p>Explora los principales lenguajes que están moldeando el desarrollo tecnológico actual, cada uno con sus paradigmas y usos distintivos.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lenguaje</th>
+                        <th>Paradigma</th>
+                        <th>Usos Comunes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Python</td>
+                        <td>Multiparadigma (orientado a objetos, funcional)</td>
+                        <td>Ciencia de Datos, Inteligencia Artificial, Desarrollo Web, Automatización</td>
+                    </tr>
+                    <tr>
+                        <td>JavaScript</td>
+                        <td>Funcional, Imperativo</td>
+                        <td>Desarrollo Web Frontend y Backend, Aplicaciones Móviles</td>
+                    </tr>
+                    <tr>
+                        <td>Java</td>
+                        <td>Orientado a Objetos</td>
+                        <td>Aplicaciones Empresariales, Aplicaciones Android, Sistemas Distribuidos</td>
+                    </tr>
+                    <tr>
+                        <td>C++</td>
+                        <td>Multiparadigma (procedimental, orientado a objetos)</td>
+                        <td>Desarrollo de Juegos, Sistemas Operativos, Software de Alto Rendimiento</td>
+                    </tr>
+                    <tr>
+                        <td>Go</td>
+                        <td>Procedural, Concurrente</td>
+                        <td>Desarrollo Backend, Servicios en la Nube, Sistemas Escalables</td>
+                    </tr>
+                </tbody>
+                <caption>Fuente: Stack Overflow Developer Survey 2023</caption>
+            </table>
+            <div class="box" role="note">
+                <p>Cada lenguaje tiene ventajas únicas que permiten resolver diferentes tipos de problemas y proyectos.</p>
+            </div>
+            <p><a href="#" class="internal-link" data-page="home">Volver al inicio</a></p>
+        </section>
+
+        <!-- Página Herramientas y Frameworks -->
+        <section id="page2" class="page" tabindex="0" aria-label="Información sobre herramientas y frameworks de programación">
+            <h2>Herramientas y Frameworks Fundamentales</h2>
+            <div class="box clearfix" role="region" aria-label="Imagen y texto sobre herramientas">
+                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=640&q=80" alt="Programador trabajando en laptop con herramientas" class="image-left responsive" />
+                <p>El entorno de desarrollo y las herramientas que elijas impactan directamente en tu productividad y calidad de código.</p>
+                <p>Veamos algunas de las herramientas y frameworks más usados:</p>
+            </div>
+            <ul>
+                <li><strong>Visual Studio Code:</strong> Editor de código altamente personalizable con gran soporte de extensiones.</li>
+                <li><strong>Git y GitHub:</strong> Sistemas para el control de versiones y colaboración en proyectos.</li>
+                <li><strong>React:</strong> Biblioteca JavaScript para construir interfaces de usuario interactivas y reactivas.</li>
+                <li><strong>Django:</strong> Framework de alto nivel para Python, enfocado en el desarrollo rápido y seguro de aplicaciones web.</li>
+                <li><strong>Docker:</strong> Plataforma para desarrollar, enviar y ejecutar aplicaciones dentro de contenedores ligeros y portables.</li>
+            </ul>
+            <div class="box" role="note">
+                <p>Dominar estas herramientas te permitirá crear proyectos modernos, eficientes y escalables adaptados a las demandas actuales del mercado.</p>
+            </div>
+            <p>
+                <a href="#" class="internal-link" data-page="home">Volver al inicio</a> |
+                <a href="#" class="internal-link" data-page="page1">Ir a Lenguajes Populares</a>
+            </p>
+        </section>
+
+        <!-- Página Código Fuente -->
+        <section id="page3" class="page" tabindex="0" aria-label="Código fuente de la página">
+            <h2>Código Fuente</h2>
+            <p>A continuación se muestra el código HTML completo que da vida a esta página web.</p>
+            <pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; /&gt;
+    &lt;title&gt;Proyecto Equipo 4 - Mundo de la Programación&lt;/title&gt;
+    &lt;style&gt;
+        /* Reset &amp; base */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: &#39;Segoe UI&#39;, Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #f0f4f8;
+        }
+        a {
+            text-decoration: none;
+            color: #a3d2f2;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        a:hover, a:focus {
+            color: #fffffe;
+            outline: none;
+        }
+        /* Container and layout */
+        #container {
+            max-width: 960px;
+            margin: 25px auto;
+            background: #0f1e38;
+            border-radius: 12px;
+            box-shadow: 0 12px 25px rgba(29, 74, 122, 0.8);
+            padding: 30px 35px 45px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            border-bottom: 3px solid #6bc1ff;
+            padding-bottom: 18px;
+            margin-bottom: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            color: #90caf9;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        header .location {
+            font-size: 1.1rem;
+            color: #a3d2f2;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        nav {
+            position: relative;
+            z-index: 10;
+        }
+        /* Menu horizontal with dropdown */
+        ul.menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        ul.menu &gt; li {
+            position: relative;
+        }
+        ul.menu &gt; li &gt; a {
+            padding: 10px 14px;
+            border-radius: 6px;
+            display: block;
+            background: transparent;
+            color: #a3d2f2;
+            user-select: none;
+        }
+        ul.menu &gt; li &gt; a:hover, ul.menu &gt; li &gt; a.active {
+            background: #4a90e2;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        /* Dropdown */
+        ul.menu li ul.dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #1b2a51;
+            border-radius: 8px;
+            padding: 8px 0;
+            min-width: 220px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        ul.menu li:hover ul.dropdown, ul.menu li:focus-within ul.dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        ul.menu li ul.dropdown li {
+            padding: 0;
+            margin: 0;
+        }
+        ul.menu li ul.dropdown li a {
+            padding: 10px 16px;
+            color: #b9d6fb;
+            font-weight: 500;
+            display: block;
+        }
+        ul.menu li ul.dropdown li a:hover {
+            background: #3369ce;
+            color: white;
+        }
+        /* Page sections */
+        section.page {
+            display: none;
+            animation: fadeInPage 0.5s ease forwards;
+            flex-grow: 1;
+        }
+        section.page.active {
+            display: block;
+        }
+        @keyframes fadeInPage {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        /* Boxes and margins */
+        .box {
+            background: linear-gradient(135deg, #3a5a99 0%, #2a4370 100%);
+            border: 2px solid #4178c0;
+            border-radius: 14px;
+            padding: 22px 28px;
+            margin: 25px 0;
+            box-shadow: inset 0 0 15px rgb(77 135 199 / 0.3);
+            color: #dde9f8;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        .highlight-text {
+            color: #81d4fa;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+            box-shadow: 0 0 18px rgba(48, 88, 152, 0.35);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #19345a;
+            color: #b8d1fb;
+        }
+        thead {
+            background: #4472ce;
+            color: #f0f8ff;
+            font-weight: 700;
+        }
+        th, td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #3560b4;
+            text-align: left;
+        }
+        tbody tr:nth-child(even) {
+            background: #1f3c7f;
+        }
+        tbody tr:hover {
+            background: #2a599c;
+            color: #e1ecfe;
+        }
+        caption {
+            caption-side: bottom;
+            padding-top: 12px;
+            font-style: italic;
+            color: #8fb4e1;
+            font-size: 0.95rem;
+        }
+        /* Images */
+        img.responsive {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 3px 4px 12px rgba(81, 150, 228, 0.7);
+            margin-bottom: 18px;
+        }
+        .image-left {
+            float: left;
+            margin-right: 22px;
+            width: 48%;
+            max-width: 360px;
+            border-radius: 14px;
+            border: 3px solid #67a7fb;
+            box-shadow: 1px 1px 12px rgba(77, 131, 210, 0.65);
+        }
+        .clearfix::after {
+            content: &quot;&quot;;
+            display: table;
+            clear: both;
+        }
+        /* Footer */
+        footer {
+            margin-top: 45px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #8db1eb;
+            border-top: 1px solid #3c5ba7;
+            padding-top: 18px;
+            font-weight: 500;
+        }
+        /* Code block styles */
+        pre {
+            max-height: 450px;
+            overflow: auto;
+            background: #172a4a;
+            border: 1px solid #4178c0;
+            border-radius: 14px;
+            padding: 15px;
+            font-family: &#39;Consolas&#39;, &#39;Courier New&#39;, monospace;
+            font-size: 0.85rem;
+            color: #b8d1fb;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        /* Responsive */
+        @media (max-width: 720px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            ul.menu {
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+            }
+            ul.menu li ul.dropdown {
+                position: static;
+                transform: translateY(0);
+                opacity: 1 !important;
+                visibility: visible !important;
+                box-shadow: none;
+                min-width: 100%;
+                margin-top: 8px;
+                border-radius: 10px;
+                padding: 10px 0;
+            }
+            .image-left {
+                width: 100%;
+                margin: 0 0 22px 0;
+                float: none;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id=&quot;container&quot;&gt;
+        &lt;header&gt;
+            &lt;h1&gt;Mundo de la Programación&lt;/h1&gt;
+            &lt;div class=&quot;location&quot; tabindex=&quot;0&quot; aria-label=&quot;Lugar de desarrollo del proyecto&quot;&gt;Desarrollado en: Nuevo Casas Grandes, Chihuahua&lt;/div&gt;
+            &lt;nav aria-label=&quot;Menú principal del sitio&quot;&gt;
+                &lt;ul class=&quot;menu&quot; role=&quot;menubar&quot;&gt;
+                    &lt;li role=&quot;none&quot;&gt;
+                        &lt;a href=&quot;#&quot; class=&quot;nav-link active&quot; data-page=&quot;home&quot; role=&quot;menuitem&quot; tabindex=&quot;0&quot;&gt;Inicio&lt;/a&gt;
+                    &lt;/li&gt;
+                    &lt;li role=&quot;none&quot;&gt;
+                        &lt;a href=&quot;#&quot; class=&quot;nav-link&quot; data-page=&quot;page1&quot; role=&quot;menuitem&quot; tabindex=&quot;0&quot;&gt;Lenguajes Populares&lt;/a&gt;
+                    &lt;/li&gt;
+                    &lt;li role=&quot;none&quot;&gt;
+                        &lt;a href=&quot;#&quot; class=&quot;nav-link&quot; data-page=&quot;page2&quot; role=&quot;menuitem&quot; tabindex=&quot;0&quot;&gt;Herramientas y Frameworks&lt;/a&gt;
+                    &lt;/li&gt;
+                    &lt;li role=&quot;none&quot;&gt;
+                        &lt;a href=&quot;#&quot; class=&quot;nav-link&quot; data-page=&quot;page3&quot; role=&quot;menuitem&quot; tabindex=&quot;0&quot;&gt;Código Fuente&lt;/a&gt;
+                    &lt;/li&gt;
+                    &lt;li role=&quot;none&quot; aria-haspopup=&quot;true&quot;&gt;
+                        &lt;a href=&quot;#&quot; role=&quot;menuitem&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;submenu-team&quot; id=&quot;menu-team&quot; tabindex=&quot;0&quot;&gt;Equipo ▾&lt;/a&gt;
+                        &lt;ul class=&quot;dropdown&quot; role=&quot;menu&quot; aria-labelledby=&quot;menu-team&quot; id=&quot;submenu-team&quot;&gt;
+                            &lt;li role=&quot;none&quot;&gt;&lt;a href=&quot;#&quot; role=&quot;menuitem&quot; tabindex=&quot;-1&quot;&gt;Jorge Espinoza Melendez&lt;/a&gt;&lt;/li&gt;
+                            &lt;li role=&quot;none&quot;&gt;&lt;a href=&quot;#&quot; role=&quot;menuitem&quot; tabindex=&quot;-1&quot;&gt;Emiliano Jaquez Reyes&lt;/a&gt;&lt;/li&gt;
+                            &lt;li role=&quot;none&quot;&gt;&lt;a href=&quot;#&quot; role=&quot;menuitem&quot; tabindex=&quot;-1&quot;&gt;Jhonatan Perez&lt;/a&gt;&lt;/li&gt;
+                            &lt;li role=&quot;none&quot;&gt;&lt;a href=&quot;#&quot; role=&quot;menuitem&quot; tabindex=&quot;-1&quot;&gt;Pablo Morales&lt;/a&gt;&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/nav&gt;
+        &lt;/header&gt;
+
+        &lt;!-- Página Inicio --&gt;
+        &lt;section id=&quot;home&quot; class=&quot;page active&quot; tabindex=&quot;0&quot; aria-label=&quot;Página de inicio&quot;&gt;
+            &lt;h2&gt;Bienvenidos al fascinante mundo de la programación&lt;/h2&gt;
+            &lt;div class=&quot;box clearfix&quot; role=&quot;region&quot; aria-label=&quot;Introducción con imagen y texto&quot;&gt;
+                &lt;img src=&quot;https://images.unsplash.com/photo-1517433456452-f9633a875f6f?auto=format&amp;fit=crop&amp;w=640&amp;q=80&quot; alt=&quot;Pantalla con código, teclado y café, simbolizando programación&quot; class=&quot;image-left responsive&quot; /&gt;
+                &lt;p&gt;La programación es la habilidad fundamental que permite crear software, aplicaciones y soluciones digitales que impactan el mundo moderno.&lt;/p&gt;
+                &lt;p class=&quot;highlight-text&quot;&gt;Desde crear páginas web hasta desarrollar inteligencia artificial, la programación abre infinitas posibilidades.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;h3&gt;¿Qué encontrarás en este sitio?&lt;/h3&gt;
+            &lt;ul&gt;
+                &lt;li&gt;Características y usos de los lenguajes de programación más influyentes.&lt;/li&gt;
+                &lt;li&gt;Explicaciones detalladas sobre herramientas y frameworks esenciales.&lt;/li&gt;
+                &lt;li&gt;Tablas informativas, imágenes ilustrativas y enlaces útiles para aprender más.&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/section&gt;
+
+        &lt;!-- Página Lenguajes Populares --&gt;
+        &lt;section id=&quot;page1&quot; class=&quot;page&quot; tabindex=&quot;0&quot; aria-label=&quot;Información sobre lenguajes de programación populares&quot;&gt;
+            &lt;h2&gt;Lenguajes de Programación Populares&lt;/h2&gt;
+            &lt;p&gt;Explora los principales lenguajes que están moldeando el desarrollo tecnológico actual, cada uno con sus paradigmas y usos distintivos.&lt;/p&gt;
+            &lt;table&gt;
+                &lt;thead&gt;
+                    &lt;tr&gt;
+                        &lt;th&gt;Lenguaje&lt;/th&gt;
+                        &lt;th&gt;Paradigma&lt;/th&gt;
+                        &lt;th&gt;Usos Comunes&lt;/th&gt;
+                    &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;Python&lt;/td&gt;
+                        &lt;td&gt;Multiparadigma (orientado a objetos, funcional)&lt;/td&gt;
+                        &lt;td&gt;Ciencia de Datos, Inteligencia Artificial, Desarrollo Web, Automatización&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;JavaScript&lt;/td&gt;
+                        &lt;td&gt;Funcional, Imperativo&lt;/td&gt;
+                        &lt;td&gt;Desarrollo Web Frontend y Backend, Aplicaciones Móviles&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;Java&lt;/td&gt;
+                        &lt;td&gt;Orientado a Objetos&lt;/td&gt;
+                        &lt;td&gt;Aplicaciones Empresariales, Aplicaciones Android, Sistemas Distribuidos&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;C++&lt;/td&gt;
+                        &lt;td&gt;Multiparadigma (procedimental, orientado a objetos)&lt;/td&gt;
+                        &lt;td&gt;Desarrollo de Juegos, Sistemas Operativos, Software de Alto Rendimiento&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;Go&lt;/td&gt;
+                        &lt;td&gt;Procedural, Concurrente&lt;/td&gt;
+                        &lt;td&gt;Desarrollo Backend, Servicios en la Nube, Sistemas Escalables&lt;/td&gt;
+                    &lt;/tr&gt;
+                &lt;/tbody&gt;
+                &lt;caption&gt;Fuente: Stack Overflow Developer Survey 2023&lt;/caption&gt;
+            &lt;/table&gt;
+            &lt;div class=&quot;box&quot; role=&quot;note&quot;&gt;
+                &lt;p&gt;Cada lenguaje tiene ventajas únicas que permiten resolver diferentes tipos de problemas y proyectos.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;p&gt;&lt;a href=&quot;#&quot; class=&quot;internal-link&quot; data-page=&quot;home&quot;&gt;Volver al inicio&lt;/a&gt;&lt;/p&gt;
+        &lt;/section&gt;
+
+        &lt;!-- Página Herramientas y Frameworks --&gt;
+        &lt;section id=&quot;page2&quot; class=&quot;page&quot; tabindex=&quot;0&quot; aria-label=&quot;Información sobre herramientas y frameworks de programación&quot;&gt;
+            &lt;h2&gt;Herramientas y Frameworks Fundamentales&lt;/h2&gt;
+            &lt;div class=&quot;box clearfix&quot; role=&quot;region&quot; aria-label=&quot;Imagen y texto sobre herramientas&quot;&gt;
+                &lt;img src=&quot;https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&amp;fit=crop&amp;w=640&amp;q=80&quot; alt=&quot;Programador trabajando en laptop con herramientas&quot; class=&quot;image-left responsive&quot; /&gt;
+                &lt;p&gt;El entorno de desarrollo y las herramientas que elijas impactan directamente en tu productividad y calidad de código.&lt;/p&gt;
+                &lt;p&gt;Veamos algunas de las herramientas y frameworks más usados:&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;strong&gt;Visual Studio Code:&lt;/strong&gt; Editor de código altamente personalizable con gran soporte de extensiones.&lt;/li&gt;
+                &lt;li&gt;&lt;strong&gt;Git y GitHub:&lt;/strong&gt; Sistemas para el control de versiones y colaboración en proyectos.&lt;/li&gt;
+                &lt;li&gt;&lt;strong&gt;React:&lt;/strong&gt; Biblioteca JavaScript para construir interfaces de usuario interactivas y reactivas.&lt;/li&gt;
+                &lt;li&gt;&lt;strong&gt;Django:&lt;/strong&gt; Framework de alto nivel para Python, enfocado en el desarrollo rápido y seguro de aplicaciones web.&lt;/li&gt;
+                &lt;li&gt;&lt;strong&gt;Docker:&lt;/strong&gt; Plataforma para desarrollar, enviar y ejecutar aplicaciones dentro de contenedores ligeros y portables.&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;div class=&quot;box&quot; role=&quot;note&quot;&gt;
+                &lt;p&gt;Dominar estas herramientas te permitirá crear proyectos modernos, eficientes y escalables adaptados a las demandas actuales del mercado.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;p&gt;
+                &lt;a href=&quot;#&quot; class=&quot;internal-link&quot; data-page=&quot;home&quot;&gt;Volver al inicio&lt;/a&gt; |
+                &lt;a href=&quot;#&quot; class=&quot;internal-link&quot; data-page=&quot;page1&quot;&gt;Ir a Lenguajes Populares&lt;/a&gt;
+            &lt;/p&gt;
+        &lt;/section&gt;
+
+        &lt;!-- Página Código Fuente --&gt;
+        &lt;section id=&quot;page3&quot; class=&quot;page&quot; tabindex=&quot;0&quot; aria-label=&quot;Código fuente de la página&quot;&gt;
+            &lt;h2&gt;Código Fuente&lt;/h2&gt;
+            &lt;p&gt;A continuación se muestra el código HTML completo que da vida a esta página web.&lt;/p&gt;
+            &lt;pre&gt;&lt;code&gt;
+...el resto del código completo, escaped como aquí...
+            &lt;/code&gt;&lt;/pre&gt;
+        &lt;/section&gt;
+
+        &lt;footer&gt;
+            &amp;copy; 2024 Equipo 4 - Proyecto de Segundo Bimestre - &lt;strong&gt;Nuevo Casas Grandes, Chihuahua&lt;/strong&gt;
+        &lt;/footer&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // Navegación para mostrar/ocultar páginas
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('section.page');
+
+        navLinks.forEach(link =&gt; {
+            link.addEventListener('click', e =&gt; {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                if (!page) return;
+
+                navLinks.forEach(nav =&gt; nav.classList.remove('active'));
+                link.classList.add('active');
+
+                pages.forEach(section =&gt; section.classList.remove('active'));
+                const target = document.getElementById(page);
+                if (target) target.classList.add('active');
+
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        });
+
+        // Internal links inside pages (like "volver al inicio")
+        document.querySelectorAll('.internal-link').forEach(link =&gt; {
+            link.addEventListener('click', e =&gt; {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                if (!page) return;
+
+                navLinks.forEach(nav =&gt; {
+                    nav.classList.toggle('active', nav.getAttribute('data-page') === page);
+                });
+
+                pages.forEach(section =&gt; section.classList.remove('active'));
+                const target = document.getElementById(page);
+                if (target) target.classList.add('active');
+
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        });
+
+        // Accessibility: Dropdown keyboard support for Equipo menu
+        const menuTeam = document.getElementById('menu-team');
+        const submenuTeam = document.getElementById('submenu-team');
+
+        menuTeam.addEventListener('keydown', (e) =&gt; {
+            if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+                e.preventDefault();
+                const expanded = menuTeam.getAttribute('aria-expanded') === 'true';
+                menuTeam.setAttribute('aria-expanded', String(!expanded));
+                if (!expanded) {
+                    submenuTeam.querySelector('a').focus();
+                } else {
+                    menuTeam.focus();
+                }
+            } else if (e.key === "Escape") {
+                menuTeam.setAttribute('aria-expanded', 'false');
+                menuTeam.focus();
+            }
+        });
+
+        submenuTeam.querySelectorAll('a').forEach((item, idx, list) =&gt; {
+            item.addEventListener('keydown', (e) =&gt; {
+                if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    let nextIdx = (idx + 1) % list.length;
+                    list[nextIdx].focus();
+                } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    let prevIdx = (idx - 1 + list.length) % list.length;
+                    list[prevIdx].focus();
+                } else if (e.key === "Escape") {
+                    menuTeam.setAttribute('aria-expanded', 'false');
+                    menuTeam.focus();
+                }
+            });
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+            </code></pre>
+            <p><a href="#" class="internal-link" data-page="home">Volver al inicio</a></p>
+        </section>
+
+        <footer>
+            &copy; 2024 Equipo 4 - Proyecto de Segundo Bimestre - <strong>Nuevo Casas Grandes, Chihuahua</strong>
+        </footer>
+    </div>
+
+    <script>
+        // Navegación para mostrar/ocultar páginas
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('section.page');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                if (!page) return;
+
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                link.classList.add('active');
+
+                pages.forEach(section => section.classList.remove('active'));
+                const target = document.getElementById(page);
+                if (target) target.classList.add('active');
+
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        });
+
+        // Internal links inside pages (like "volver al inicio")
+        document.querySelectorAll('.internal-link').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                if (!page) return;
+
+                navLinks.forEach(nav => {
+                    nav.classList.toggle('active', nav.getAttribute('data-page') === page);
+                });
+
+                pages.forEach(section => section.classList.remove('active'));
+                const target = document.getElementById(page);
+                if (target) target.classList.add('active');
+
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        });
+
+        // Accessibility: Dropdown keyboard support for Equipo menu
+        const menuTeam = document.getElementById('menu-team');
+        const submenuTeam = document.getElementById('submenu-team');
+
+        menuTeam.addEventListener('keydown', (e) => {
+            if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+                e.preventDefault();
+                const expanded = menuTeam.getAttribute('aria-expanded') === 'true';
+                menuTeam.setAttribute('aria-expanded', String(!expanded));
+                if (!expanded) {
+                    submenuTeam.querySelector('a').focus();
+                } else {
+                    menuTeam.focus();
+                }
+            } else if (e.key === "Escape") {
+                menuTeam.setAttribute('aria-expanded', 'false');
+                menuTeam.focus();
+            }
+        });
+
+        submenuTeam.querySelectorAll('a').forEach((item, idx, list) => {
+            item.addEventListener('keydown', (e) => {
+                if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    let nextIdx = (idx + 1) % list.length;
+                    list[nextIdx].focus();
+                } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    let prevIdx = (idx - 1 + list.length) % list.length;
+                    list[prevIdx].focus();
+                } else if (e.key === "Escape") {
+                    menuTeam.setAttribute('aria-expanded', 'false');
+                    menuTeam.focus();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
